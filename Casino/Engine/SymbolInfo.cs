@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
+using System.Windows.Media;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 
 namespace Casino.Engine
 {
@@ -14,17 +15,17 @@ namespace Casino.Engine
             switch (s)
             {
                 case Symbol.Cherry:
-                    return ("Cseresznye", Color.Red, Color.White);
+                    return ("Cseresznye", Color.FromRgb(239,68,68), Colors.White);
                 case Symbol.Lemon:
-                    return ("Citrom", Color.Yellow, Color.Black);
+                    return ("Citrom", Color.FromRgb(250, 204, 21), Colors.Black);
                 case Symbol.Bar:
-                    return ("BAR", Color.Gray, Color.White);
+                    return ("BAR", Color.FromRgb(107, 114, 128), Colors.White);
                 case Symbol.Diamond:
-                    return("Gyémánt", Color.LightBlue, Color.Black);
+                    return("Gyémánt", Color.FromRgb(59, 130, 246), Colors.Black);
                 case Symbol.Seven:
-                    return ("777", Color.Green, Color.Black);
+                    return ("777", Color.FromRgb(16, 185, 129), Colors.Black);
                 default:
-                    return("?", Color.DarkGray, Color.White);
+                    return("?", Colors.DarkGray, Colors.White);
 
             }
         }

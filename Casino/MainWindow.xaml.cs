@@ -14,11 +14,75 @@ namespace Casino
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
-    {
-        public MainWindow()
+
+        public partial class MainWindow : Window
         {
-            InitializeComponent();
+            private int _balance = 1000;
+            private int _bet = 100;
+
+            public MainWindow()
+            {
+                InitializeComponent();
+                UpdateHud();
+                Slot.SetGetBetFunc(() => _bet);
+                Slot.SetOnWin(AddWinToBalance);
+                Slot.SetCanSpendFunc(SpendBalance);
+            }
+
+            private void UpdateHud()
+            {
+                TxtBalance.Text = _balance.ToString();
+                TxtBet.Text = _bet.ToString();
+                // Nyeremény mezőt a Slot állítja, de nullázzuk pörgetés előtt is.
+            }
+
+            private bool SpendBalance(int amount)
+            {
+                if (_balance >= amount)
+                {
+                    _balance -= amount;
+                    UpdateHud();
+                    return true;
+                }
+                return false;
+            }
+
+            private void AddWinToBalance(int win)
+            {
+                _balance += win;
+                TxtWin.Text = win.ToString();
+                UpdateHud();
+            }
+
+            private void BtnSpin_Click(object sender, RoutedEventArgs e)
+            {
+                TxtWin.Text = "0";
+                Slot.Spin();
+            }
+
+            private void BtnAddCredit_Click(object sender, RoutedEventArgs e)
+            {
+                _balance += 500;
+                UpdateHud();
+            }
+
+            private void BtnBetMinus_Click(object sender, RoutedEventArgs e)
+            {
+                if (_bet > 10)
+                {
+                    _bet -= 10;
+                    UpdateHud();
+                }
+            }
+
+            private void BtnBetPlus_Click(object sender, RoutedEventArgs e)
+            {
+                if (_bet < 1000)
+                {
+                    _bet += 10;
+                    UpdateHud();
+                }
+            }
         }
     }
-}
+

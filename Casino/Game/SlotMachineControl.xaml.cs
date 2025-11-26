@@ -31,7 +31,11 @@ namespace Casino.Game
         private readonly PayoutTable _payout;
         private readonly Rng _rng;
 
+        private Func<int> _getBet;
+        private Action<int> _onWin;
+        private Func<int, bool> _canSpend;
         public SlotMachineControl()
+           
         {
             InitializeComponent();
 
@@ -41,9 +45,58 @@ namespace Casino.Game
             _reelB = new SlotReel(Reel2, SymbolWidth, SymbolHeight, VisibleRows, CreateSymbolVisual);
             _reelC = new SlotReel(Reel3, SymbolWidth, SymbolHeight, VisibleRows, CreateSymbolVisual);
 
+            //kezdő kitöltés
             _reelA.FillInitial(_rng);
             _reelB.FillInitial(_rng);
             _reelC.FillInitial(_rng);
+
+            //kar menjen
+            HandleBall.MouseLeftButtonDown += (s, e) =>
+            {
+                Spin();
+            };
+        }
+
+        public void SetOnWin(Action<int> onWin)
+        {
+            _onWin = onWin;
+        }
+
+        public void SetGetBetFunc(Func<int> getter)
+        {
+            _getBet = getter;
+        }
+        public void SetCanSpendFunc(Func<int, bool> canSpend)
+        {
+            _canSpend = canSpend;
+        }
+
+        public void Spin()
+        {
+            if (_getBet == null || _canSpend == null || _onWin==null) return;
+            var bet = _getBet();
+            var ok = _canSpend(bet);
+            if (!ok) return;
+
+            //Véletlen cél szimbólumok a három középső cellába
+            var resultA = _payout.PickWeighted(_rng);
+            var resultB = _payout.PickWeighted(_rng);
+            var resultC = _payout.PickWeighted(_rng);
+
+            //henger animációk különböző idővel, hogy "életszerű" legyen
+            _reelA.SpinFor(TimeSpan.FromMilliseconds(1200), _rng, resultA);
+            _reelB.SpinFor(TimeSpan.FromMilliseconds(1500), _rng, resultB);
+            _reelC.SpinFor(TimeSpan.FromMilliseconds(1800), _rng, resultC, onCompleted: ()=>
+            {
+                var line=new[] { resultA, resultB, resultC };
+                var win = _payout.CalculateWin(bet, line);
+                _onWin(win);
+                if (win > 0)
+                {
+                    //Nyeremény esetén villogtatás
+                   // FlashWin(line);
+                }
+            });
         }
 
         private FrameworkElement CreateSymbolVisual(Symbol symbol)

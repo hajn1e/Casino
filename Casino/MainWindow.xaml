@@ -23,6 +23,23 @@
                 </Grid.RowDefinitions>
 
                 <g:SlotMachineControl x:Name="Slot"/>
+
+                <DockPanel Grid.Row="1" Margin="0,20,0,0" >
+                    <StackPanel Orientation="Horizontal" DockPanel.Dock="Left" >
+                        <TextBlock Text="Egyenleg: " Foreground="White" FontSize="16" VerticalAlignment="Center"/>
+                        <TextBlock x:Name="TxtBalance" Text="1000" Foreground="#A7F3D0" FontSize="16" FontWeight="Bold" VerticalAlignment="Center" Margin="6,0,20,0"/>
+                        <TextBlock Text="Tét: " Foreground="White" FontSize="16" VerticalAlignment="Center"/>
+                        <TextBlock x:Name="TxtBet" Text="100" Foreground="#FDE68A" FontSize="16" FontWeight="Bold" VerticalAlignment="Center" Margin="6,0,20,0"/>
+                        <TextBlock Text="Nyeremény: " Foreground="White" FontSize="16" VerticalAlignment="Center"/>
+                        <TextBlock x:Name="TxtWin" Text="0" Foreground="#93C5FD" FontSize="16" FontWeight="Bold" VerticalAlignment="Center" Margin="6,0,20,0"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                <Button x:Name="BtnBetMinus" Content="−" Width="36" Height="36" Margin="0,0,6,0" Click="BtnBetMinus_Click"/>
+                                <Button x:Name="BtnBetPlus" Content="+" Width="36" Height="36" Margin="0,0,16,0" Click="BtnBetPlus_Click"/>
+                                <Button x:Name="BtnAddCredit" Content="+500 kredit" Height="36" Margin="0,0,16,0" Click="BtnAddCredit_Click"/>
+                                <Button x:Name="BtnSpin" Content="SPIN" Height="36" Width="120" Background="#10B981" Foreground="Black" FontWeight="Bold" Click="BtnSpin_Click"/>
+                            </StackPanel>
+                </DockPanel>
             </Grid>
         </Border>
     </Grid>
